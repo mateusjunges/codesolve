@@ -34,6 +34,9 @@ contextBridge.exposeInMainWorld(
     onError: (callback) => {
       ipcRenderer.on('error', (event, message) => callback(message));
     },
+    onScrollAnalysis: (callback) => {
+      ipcRenderer.on('scroll-analysis', (event, direction) => callback(direction));
+    },
     
     // Remove listeners (to avoid memory leaks)
     removeAllListeners: () => {
@@ -41,6 +44,7 @@ contextBridge.exposeInMainWorld(
       ipcRenderer.removeAllListeners('trigger-analysis');
       ipcRenderer.removeAllListeners('mouse-ignore-change');
       ipcRenderer.removeAllListeners('error');
+      ipcRenderer.removeAllListeners('scroll-analysis');
     }
   }
 );

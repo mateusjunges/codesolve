@@ -23,7 +23,8 @@
     "prismjs": "^1.30.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "screenshot-desktop": "^1.15.1"
+    "screenshot-desktop": "^1.15.1",
+    "shiki": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",

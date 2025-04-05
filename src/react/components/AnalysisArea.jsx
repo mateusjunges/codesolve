@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
 import { marked } from 'marked';
 import Prism from 'prismjs';
 
@@ -33,6 +33,8 @@ const AnalysisArea = forwardRef(({
   const [analysisResult, setAnalysisResult] = useState('');
   const [error, setError] = useState(null);
   const [renderedContent, setRenderedContent] = useState('');
+  const resultSectionRef = useRef(null);
+  const [showScrollHint, setShowScrollHint] = useState(false);
   
   // Inject syntax highlighting styles
   useEffect(() => {
@@ -231,6 +233,72 @@ const AnalysisArea = forwardRef(({
       setRenderedContent(renderMarkdown(analysisResult));
     }
   }, [analysisResult]);
+  
+  // Listen for both local keyboard events and global shortcuts from main process
+  useEffect(() => {
+    // Skip if no analysis results to scroll
+    if (!analysisResult || !resultSectionRef.current) return;
+    
+    const resultSection = resultSectionRef.current;
+    const scrollAmount = 100;
+    const pageScrollAmount = resultSection.clientHeight * 0.8;
+    
+    // Handler for scroll events from main process (global shortcuts)
+    const handleGlobalScroll = (direction) => {
+      console.log(`Global scroll: ${direction}`);
+      
+      switch(direction) {
+        case 'down':
+          resultSection.scrollTop += scrollAmount;
+          break;
+        case 'up':
+          resultSection.scrollTop -= scrollAmount;
+          break;
+        case 'pagedown':
+          resultSection.scrollTop += pageScrollAmount;
+          break;
+        case 'pageup':
+          resultSection.scrollTop -= pageScrollAmount;
+          break;
+        case 'top':
+          resultSection.scrollTop = 0;
+          break;
+        case 'bottom':
+          resultSection.scrollTop = resultSection.scrollHeight;
+          break;
+      }
+    };
+    
+    // Local keyboard handler (when app is in focus)
+    const handleKeyDown = (e) => {
+      // Regular navigation keys (only if no modifiers)
+      if (!e.metaKey && !e.ctrlKey && !e.altKey) {
+        if (e.key === 'ArrowDown' || e.key === 'j') {
+          resultSection.scrollTop += scrollAmount;
+        } else if (e.key === 'ArrowUp' || e.key === 'k') {
+          resultSection.scrollTop -= scrollAmount;
+        } else if (e.key === ' ' || e.key === 'f') {
+          resultSection.scrollTop += pageScrollAmount;
+        } else if (e.key === 'b') {
+          resultSection.scrollTop -= pageScrollAmount;
+        } else if (e.key === 'Home') {
+          resultSection.scrollTop = 0;
+        } else if (e.key === 'End') {
+          resultSection.scrollTop = resultSection.scrollHeight;
+        }
+      }
+    };
+    
+    // Register event handlers
+    window.api.onScrollAnalysis(handleGlobalScroll);
+    window.addEventListener('keydown', handleKeyDown);
+    
+    // Clean up event listeners
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      // Note: The main process listener cleanup happens via removeAllListeners in App.jsx unmount
+    };
+  }, [analysisResult]);
 
   // Analyze code using OpenAI API
   const analyzeCode = async () => {
@@ -277,7 +345,7 @@ const AnalysisArea = forwardRef(({
       )}
       
       {/* Main result section takes full width */}
-      <div className="result-section-fullwidth">
+      <div className="result-section-fullwidth" ref={resultSectionRef}>
         {isAnalyzing ? (
           <div className="loading-indicator">
             <div className="spinner"></div>
@@ -293,7 +361,7 @@ const AnalysisArea = forwardRef(({
           </div>
         ) : (
           <div className="result-placeholder">
-            Take a screenshot and click "Analyze Code" to get results from GPT-4o
+            Take a screenshot and click "Analyze" to get results from GPT-4o
           </div>
         )}
       </div>

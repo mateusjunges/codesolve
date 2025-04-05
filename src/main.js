@@ -78,7 +78,7 @@ function createWindow() {
     // Prevent window from appearing in Mission Control
     mainWindow.setAutoHideMenuBar(true);
     mainWindow.setWindowButtonVisibility(false);
-    mainWindow.setContentProtection(true);
+    mainWindow.setContentProtection(false);
     
     // Critical: Use a window level beyond what OBS typically captures
     // For the ultimate anti-OBS stealth on macOS, we use a HIGHER level than screen-saver
@@ -182,6 +182,38 @@ function registerShortcuts() {
       
       // Focus the window to ensure it receives the event
       mainWindow.focus();
+    }
+  });
+  
+  // Scroll down shortcut (Cmd+Shift+Down)
+  globalShortcut.register('CommandOrControl+Shift+Down', () => {
+    if (mainWindow) {
+      console.log('Cmd+Shift+Down: Scrolling down');
+      mainWindow.webContents.send('scroll-analysis', 'down');
+      // Don't focus the window to keep current app focus
+    }
+  });
+  
+  // Scroll up shortcut (Cmd+Shift+Up)
+  globalShortcut.register('CommandOrControl+Shift+Up', () => {
+    if (mainWindow) {
+      console.log('Cmd+Shift+Up: Scrolling up');
+      mainWindow.webContents.send('scroll-analysis', 'up');
+      // Don't focus the window to keep current app focus
+    }
+  });
+  
+  // Page down shortcut (Cmd+Shift+PageDown)
+  globalShortcut.register('CommandOrControl+Shift+PageDown', () => {
+    if (mainWindow) {
+      mainWindow.webContents.send('scroll-analysis', 'pagedown');
+    }
+  });
+  
+  // Page up shortcut (Cmd+Shift+PageUp)
+  globalShortcut.register('CommandOrControl+Shift+PageUp', () => {
+    if (mainWindow) {
+      mainWindow.webContents.send('scroll-analysis', 'pageup');
     }
   });
 
