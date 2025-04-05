@@ -179,12 +179,14 @@ body {
 .analysis-area {
   flex: 1;
   display: flex;
+  flex-direction: column;
   padding: 16px;
   gap: 16px;
   overflow: hidden;
 }
 
-.screenshot-section, .result-section {
+/* Result section */
+.result-section {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -194,21 +196,89 @@ body {
   overflow: hidden;
 }
 
-.screenshot-container, .result-container {
+/* Ultra-compact screenshot strip */
+.screenshot-micro-strip {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.screenshot-micro {
+  height: 30px;
+  object-fit: cover;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.screenshot-micro:hover {
+  opacity: 1;
+}
+
+/* Full-width result section */
+.result-section-fullwidth {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  overflow: auto;
+  margin-bottom: 8px;
+}
+
+/* Footer buttons */
+.footer-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.small-btn {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.small-btn:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+  color: white;
+}
+
+.analyze-btn {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.analyze-btn:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.3);
+}
+
+.small-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.result-container {
   flex: 1;
   overflow: auto;
   margin-bottom: 16px;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.screenshot-preview {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 16px;
 }
 
 .screenshot-placeholder, .result-placeholder {
@@ -226,9 +296,96 @@ body {
   width: 100%;
   height: 100%;
   overflow: auto;
-  white-space: pre-wrap;
-  padding: 8px;
-  font-family: monospace;
+  padding: 16px;
+  line-height: 1.5;
+}
+
+/* Markdown content styling */
+.markdown-content {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--text-color);
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.markdown-content h1 { font-size: 2em; border-bottom: 1px solid var(--border-color); padding-bottom: 0.3em; }
+.markdown-content h2 { font-size: 1.5em; border-bottom: 1px solid var(--border-color); padding-bottom: 0.3em; }
+.markdown-content h3 { font-size: 1.25em; }
+.markdown-content h4 { font-size: 1em; }
+
+.markdown-content p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-content a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.markdown-content a:hover {
+  text-decoration: underline;
+}
+
+.markdown-content blockquote {
+  margin: 0 0 16px 0;
+  padding: 0 1em;
+  color: rgba(255, 255, 255, 0.7);
+  border-left: 3px solid var(--border-color);
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  padding-left: 2em;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-content li {
+  margin-bottom: 0.25em;
+}
+
+.markdown-content table {
+  border-collapse: collapse;
+  margin: 16px 0;
+  width: 100%;
+}
+
+.markdown-content table th,
+.markdown-content table td {
+  padding: 6px 13px;
+  border: 1px solid var(--border-color);
+}
+
+.markdown-content table th {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+}
+
+.markdown-content table tr {
+  background-color: transparent;
+}
+
+.markdown-content table tr:nth-child(2n) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.markdown-content img {
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
 }
 
 /* Loading Indicator */
