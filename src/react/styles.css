@@ -1,5 +1,6 @@
 :root {
   --primary-color: #4a86e8;
+  --primary-color-rgb: 74, 134, 232; /* RGB values for primary color */
   --secondary-color: #6aa84f;
   --background-color: rgba(30, 30, 30, 0.8);
   --text-color: #ffffff;
@@ -43,6 +44,18 @@ body {
   background-color: rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid var(--border-color);
   -webkit-app-region: drag;
+  transition: background-color 0.3s ease;
+}
+
+/* Visual feedback for keyboard shortcuts */
+.status-bar.shortcut-triggered {
+  background-color: var(--primary-color);
+  animation: pulse 1s ease-out;
+}
+
+@keyframes pulse {
+  0% { background-color: var(--primary-color); }
+  100% { background-color: rgba(0, 0, 0, 0.3); }
 }
 
 .status-buttons {
@@ -253,51 +266,358 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
   background-color: var(--background-color);
-  border-radius: 8px;
+  border-radius: 12px;
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
-  overflow: auto;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-modal {
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--border-color);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-icon {
+  font-size: 20px;
 }
 
 .modal-body {
-  padding: 16px;
+  padding: 0;
+  flex: 1;
+  overflow: auto;
+}
+
+/* Settings Tabs */
+.settings-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  padding: 12px 16px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tab-button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.tab-button.active {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  color: var(--primary-color);
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+}
+
+.tab-icon {
+  font-size: 16px;
+}
+
+.tab-content {
+  padding: 20px;
 }
 
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color);
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 12px;
   margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.shortcuts-list {
+/* API Key Tab */
+.api-key-group {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.input-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.api-help {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.api-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 16px;
+}
+
+.api-key-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  padding-right: 45px; /* Make room for the reveal button */
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  font-family: monospace;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.reveal-button {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal-button:hover {
+  color: var(--text-color);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.reveal-button:active {
+  transform: scale(0.95);
+}
+
+.api-key-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.api-info {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 12px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 6px;
+  gap: 8px;
+}
+
+.info-icon {
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.info-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+.api-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  margin-left: 6px;
+}
+
+.api-link:hover {
+  text-decoration: underline;
+}
+
+.save-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-icon {
+  font-size: 16px;
+}
+
+/* Shortcuts Tab */
+.shortcuts-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.shortcut-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shortcut-title {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: var(--primary-color);
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.shortcut-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.shortcut-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  border-radius: 50%;
+}
+
+.shortcut-info {
+  flex: 1;
+}
+
+.shortcut-key {
+  font-family: monospace;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--primary-color);
+  margin-bottom: 4px;
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.shortcut-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* About Tab */
+.about-tab {
+  text-align: center;
+}
+
+.about-logo {
+  margin-bottom: 24px;
+}
+
+.app-logo {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(45deg, var(--primary-color), #9c5aff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* Fallback */
+}
+
+.app-version {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.about-description {
+  margin-bottom: 24px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.about-features {
+  text-align: left;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.about-features h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: var(--primary-color);
+  font-size: 16px;
+}
+
+.about-features ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
-.shortcuts-list li {
+.about-features li {
   margin-bottom: 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }

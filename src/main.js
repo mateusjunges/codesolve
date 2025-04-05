@@ -28,6 +28,9 @@ let mainWindow;
 // Track the state of mouse events (click-through mode)
 let isIgnoringMouseEvents = false;
 
+// Track the latest screenshot path
+let latestScreenshotPath = null;
+
 // Create temporary directory for screenshots
 const tmpDir = path.join(os.tmpdir(), 'codesolve');
 if (!fs.existsSync(tmpDir)) {
@@ -164,7 +167,21 @@ function registerShortcuts() {
   // Analysis trigger shortcut (Cmd+Enter)
   globalShortcut.register('CommandOrControl+Enter', () => {
     if (mainWindow) {
-      mainWindow.webContents.send('trigger-analysis');
+      console.log('Cmd+Enter pressed: Triggering code analysis');
+      
+      // Get the current screenshot path from the main process
+      console.log('Current screenshot path:', latestScreenshotPath);
+      
+      // Send the event and the current screenshot path to ensure syncing
+      mainWindow.webContents.send('trigger-analysis', latestScreenshotPath);
+      
+      // Briefly flash the window to provide visual feedback
+      if (!mainWindow.isVisible()) {
+        mainWindow.show();
+      }
+      
+      // Focus the window to ensure it receives the event
+      mainWindow.focus();
     }
   });
 
@@ -205,16 +222,23 @@ async function takeScreenshot() {
     // Take screenshot
     await screenshot({ filename: screenshotPath });
     
+    // Save the latest screenshot path to the global variable
+    latestScreenshotPath = screenshotPath;
+    console.log('Screenshot saved to:', latestScreenshotPath);
+    
     // Send screenshot path to renderer
     if (mainWindow) {
       mainWindow.webContents.send('screenshot-taken', screenshotPath);
       mainWindow.show(); // Ensure window is visible
     }
+    
+    return screenshotPath;
   } catch (error) {
     console.error('Screenshot error:', error);
     if (mainWindow) {
       mainWindow.webContents.send('error', 'Failed to take screenshot');
     }
+    return null;
   }
 }
 

@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld(
       ipcRenderer.on('screenshot-taken', (event, screenshotPath) => callback(screenshotPath));
     },
     onTriggerAnalysis: (callback) => {
-      ipcRenderer.on('trigger-analysis', () => callback());
+      ipcRenderer.on('trigger-analysis', (event, screenshotPath) => callback(screenshotPath));
     },
     onMouseIgnoreChange: (callback) => {
       ipcRenderer.on('mouse-ignore-change', (event, isIgnoring) => callback(isIgnoring));

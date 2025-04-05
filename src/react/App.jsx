@@ -46,22 +46,58 @@ const App = () => {
       setStatus('Screenshot captured');
     });
 
-    // Listen for Cmd+Enter shortcut
-    window.api.onTriggerAnalysis(() => {
-      // If we have a screenshot and we're not already analyzing, trigger analysis
-      if (currentScreenshot && !isAnalyzing) {
-        setStatus('Shortcut triggered: Analyzing code...');
-        // We'll use a ref to access the AnalysisArea component's analyzeCode method
-        if (analysisAreaRef.current && analysisAreaRef.current.analyzeCode) {
-          analysisAreaRef.current.analyzeCode();
-        }
+    // Register event handler reference for trigger-analysis
+    window.api.onTriggerAnalysis((screenshotPath) => {
+      console.log('Trigger analysis event received in React with path:', screenshotPath);
+      
+      // If a screenshot path is provided from main process, update our state
+      if (screenshotPath && screenshotPath !== currentScreenshot) {
+        console.log('Updating screenshot path from main process:', screenshotPath);
+        setCurrentScreenshot(screenshotPath);
       }
+      
+      // Small delay to ensure state is updated
+      setTimeout(() => handleTriggerAnalysis(), 50);
     });
-
+    
     window.api.onError((message) => {
       setStatus(`Error: ${message}`);
     });
   }, []);
+  
+  // Define trigger analysis handler separately so it always has access to latest state
+  const handleTriggerAnalysis = () => {
+    console.log('Handling trigger analysis with current state');
+    console.log('Current screenshot:', currentScreenshot ? 'EXISTS' : 'NULL');
+    console.log('Is analyzing:', isAnalyzing);
+    
+    // If we have a screenshot and we're not already analyzing, trigger analysis
+    if (currentScreenshot && !isAnalyzing) {
+      setStatus('⌘+Enter shortcut: Analyzing code with GPT-4o...');
+      
+      // Brief visual indicator that the shortcut was triggered
+      const statusElement = document.querySelector('.status-bar');
+      if (statusElement) {
+        statusElement.classList.add('shortcut-triggered');
+        setTimeout(() => {
+          statusElement.classList.remove('shortcut-triggered');
+        }, 1000);
+      }
+      
+      // We'll use a ref to access the AnalysisArea component's analyzeCode method
+      if (analysisAreaRef.current && analysisAreaRef.current.analyzeCode) {
+        console.log('Calling analyzeCode method via ref');
+        analysisAreaRef.current.analyzeCode();
+      }
+    } else {
+      console.log('Cannot analyze: ' + 
+        (!currentScreenshot ? 'No screenshot taken' : 'Already analyzing'));
+      
+      setStatus(!currentScreenshot ? 
+        'Take a screenshot first (⌘+H)' : 
+        'Already analyzing...');
+    }
+  };
 
   const saveApiKey = async (key) => {
     try {
