@@ -102,8 +102,7 @@ CodeSolve is licensed under the [MIT License](LICENSE) - feel free to use, modif
 ---
 
 <div align="center">
-  
-  **Made with ❤️ for developers who value efficient problem-solving**
+
   
   [Report Bug](https://github.com/yourusername/codesolve/issues) · [Request Feature](https://github.com/yourusername/codesolve/issues)
   
