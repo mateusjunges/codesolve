@@ -31,6 +31,16 @@ let isIgnoringMouseEvents = false;
 // Track the latest screenshot path
 let latestScreenshotPath = null;
 
+// Add logs for uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error("[ERROR] Uncaught Exception:", err)
+});
+
+// Log unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[ERROR] Unhandled rejection at:', promise, 'reason:', reason);
+});
+
 // Create temporary directory for screenshots
 const tmpDir = path.join(os.tmpdir(), 'codesolve');
 if (!fs.existsSync(tmpDir)) {
