@@ -1,99 +1,111 @@
-# CodeSolve
+# 🔍 CodeSolve
 
-CodeSolve is a streamlined overlay application that helps developers solve coding problems by taking screenshots and using OpenAI's GPT-4o to analyze code issues. The app remains in the background while providing intelligent solutions without disrupting your workflow.
+<div align="center">
+  
+  ![CodeSolve Logo](https://placehold.co/600x200/3498db/ffffff?text=CodeSolve&font=montserrat)
+  
+  **An AI-powered coding assistant that lives in your workflow**
+  
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+  [![Made with Electron](https://img.shields.io/badge/Made%20with-Electron-1f425f.svg)](https://www.electronjs.org/)
+  [![Powered by OpenAI](https://img.shields.io/badge/Powered%20by-OpenAI-412991.svg)](https://openai.com/)
+  
+</div>
 
-## Features
+## 📋 Overview
 
-- **Optimized Interface**: Prioritizes solution content with compact screenshot display
-- **Smart Screenshot Management**: Quickly capture code snippets with one-click enlargement
-- **AI-Powered Analysis**: Uses OpenAI's GPT-4o to analyze code and provide detailed solutions
-- **Global Keyboard Controls**: Navigate content even while focused on other applications
-- **Modern Settings UI**: Tabbed interface for managing API keys, keyboard shortcuts, and app info
-- **Secure API Key Storage**: Your OpenAI API key is securely stored locally
-- **Syntax Highlighting**: Code solutions are displayed with proper syntax highlighting
+CodeSolve is a streamlined overlay application designed for developers to solve coding problems without disrupting their workflow. With a simple screenshot capture, CodeSolve leverages OpenAI's GPT-4o to analyze code issues and provide intelligent solutions while remaining unobtrusive in the background.
 
-## Installation
+## ✨ Key Features
 
-1. Clone this repository:
+- **Seamless Workflow Integration**: Stays in the background until needed, with global keyboard shortcuts
+- **Intelligent Code Analysis**: Powered by OpenAI's GPT-4o for accurate problem solving
+- **Smart UI Design**:
+  - Optimized interface prioritizing solutions over screenshot display
+  - One-click expandable screenshot thumbnails
+  - Syntax-highlighted code solutions
+- **Powerful Navigation**: Global keyboard controls work even when focused in other applications
+- **Secure & Private**: Local API key storage with encryption
+
+## 🚀 Getting Started
+
+### Installation
+
 ```bash
+# Clone the repository
 git clone https://github.com/yourusername/codesolve.git
+
+# Navigate to project directory
 cd codesolve
-```
 
-2. Install dependencies:
-```bash
+# Install dependencies
 npm install
-```
 
-3. Run the application:
-```bash
+# Launch the application
 npm start
 ```
 
-## Usage
+### First-time Setup
 
-### First Launch
-1. When you first launch CodeSolve, you'll be prompted to enter your OpenAI API key.
-2. Your API key will be securely stored locally on your device.
+On your first launch, you'll be prompted to enter your OpenAI API key, which will be securely stored locally on your device.
 
-### Keyboard Shortcuts
+## 🎮 Usage Guide
 
-#### Global Controls (work even when CodeSolve is not in focus)
-- **⌘+H**: Capture a screenshot of code you want to analyze
-- **⌘+Enter**: Analyze the captured code using GPT-4o
-- **⌘+Shift+Space**: Toggle window visibility (hide/show)
-- **⌘+Shift+C**: Toggle click-through mode (allows clicking through the window to interact with apps behind it)
+### Keyboard Command Reference
 
-#### Navigation Controls
-- **⌘+Shift+↑**: Scroll up in analysis results (works when in other apps)
-- **⌘+Shift+↓**: Scroll down in analysis results (works when in other apps)
-- **⌘+Shift+Page Up**: Jump up a page in analysis results
-- **⌘+Shift+Page Down**: Jump down a page in analysis results
+| Action | Global Shortcut | In-app Shortcut |
+|--------|----------------|------------------|
+| Capture screenshot | ⌘+S | - |
+| Analyze code | ⌘+Enter | - |
+| Toggle visibility | ⌘+B | - |
+| Move window | ⌘+Option+Arrow Keys | - |
+| Toggle click-through | ⌘+Shift+C | - |
+| Scroll up/down | ⌘+Shift+↑/↓ | ↑/↓ |
+| Jump to top/bottom | - | Home/End |
 
-#### In-app Navigation (when CodeSolve has focus)
-- **↑/↓** or **j/k**: Scroll up/down
-- **Space** or **f**: Page down
-- **b**: Page up
-- **Home/End**: Jump to top/bottom of solution
+### Workflow Example
 
-### Workflow
-1. Position the CodeSolve window where you want it or enable click-through mode
-2. Press **⌘+H** to take a screenshot of your code
-3. Press **⌘+Enter** to analyze the code
-4. Browse through the solution using keyboard shortcuts while continuing to work in your editor
-5. Click on the compact screenshot preview to view the original image if needed
-6. Access settings via the gear icon to manage your API key, view keyboard shortcuts, or check app info
+1. Position the CodeSolve window or enable click-through mode for unobstructed view
+2. Use **⌘+H** to capture a screenshot of problematic code
+3. Press **⌘+Enter** to get AI-powered analysis
+4. Browse through solutions with keyboard shortcuts while continuing to work in your IDE
+5. Access the original screenshot by clicking the compact preview
+6. Configure settings via the gear icon
 
-## Technical Details
+## 🛠️ Technical Architecture
 
-CodeSolve is built with:
-- **Electron**: For creating the desktop application and global keyboard shortcuts
-- **React**: For building the user interface components
-- **OpenAI API**: For code analysis with GPT-4o
-- **Prism.js**: For syntax highlighting of code blocks
-- **Marked**: For rendering markdown content in the analysis results
-- **CSS3**: For styling with modern transitions and animations
-- **AppKit**: For system-level functionality on macOS
+### Technology Stack
+- **Electron**: Cross-platform desktop application framework
+- **React**: UI component library
+- **OpenAI API**: AI-powered code analysis with GPT-4o
+- **Prism.js**: Syntax highlighting for code solutions
+- **Marked**: Markdown rendering for analysis results
+- **CSS3**: Modern animations and transitions
+- **AppKit**: macOS system integration
 
-## UI Features
+### UI Components
+- **Main Interface**: Optimized for solution readability with collapsible elements
+- **Settings Panel**:
+  - API Key management with secure storage
+  - Visual keyboard shortcut reference
+  - Application information and version details
 
-### Optimized Layout
-- Compact screenshot display (60px) that expands on click
-- Full-width analysis results for better readability
-- Tabbed settings interface for easy configuration
-- Keyboard shortcut overlays for quick reference
+## 🔒 Privacy & Security
 
-### Settings Interface
-- **API Key Tab**: Securely manage your OpenAI API key
-- **Shortcuts Tab**: Visual representation of all keyboard shortcuts
-- **About Tab**: App information and version details
+- OpenAI API keys are encrypted and stored locally using electron-store
+- No data collection beyond sending screenshots to OpenAI for analysis
+- Temporary screenshot storage with automatic deletion on application close
 
-## Privacy and Security
+## 📜 License
 
-- Your OpenAI API key is stored locally using electron-store with encryption
-- CodeSolve does not collect or transmit any data other than sending screenshots to OpenAI for analysis
-- Screenshots are stored temporarily and deleted when the application closes
+CodeSolve is licensed under the [MIT License](LICENSE) - feel free to use, modify, and distribute as needed.
 
-## License
+---
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+<div align="center">
+  
+  **Made with ❤️ for developers who value efficient problem-solving**
+  
+  [Report Bug](https://github.com/yourusername/codesolve/issues) · [Request Feature](https://github.com/yourusername/codesolve/issues)
+  
+</div>
