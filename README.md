@@ -61,7 +61,6 @@ On your first launch, you'll be prompted to enter your OpenAI API key, which wil
 | Move window | ⌘+Option+Arrow Keys | - |
 | Toggle click-through | ⌘+Shift+C | - |
 | Scroll up/down | ⌘+Shift+↑/↓ | ↑/↓ |
-| Jump to top/bottom | - | Home/End |
 
 ### Workflow Example
 
