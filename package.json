@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm run build && electron .",
     "dev": "webpack --watch",
+    "electron:dev": "cross-env NODE_ENV=development OPEN_DEV_TOOLS=true concurrently \"npm run start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,7 +14,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@electron/remote": "^2.1.2",
     "axios": "^1.8.4",
+    "cloudflare": "^4.2.0",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "electron": "^35.1.4",
     "electron-store": "^10.0.1",
     "form-data": "^4.0.2",
@@ -23,8 +28,10 @@
     "prismjs": "^1.30.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-syntax-highlighter": "^15.6.1",
     "screenshot-desktop": "^1.15.1",
-    "shiki": "^3.2.1"
+    "shiki": "^3.2.1",
+    "wait-on": "^8.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",
