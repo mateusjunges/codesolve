@@ -267,7 +267,7 @@ function registerShortcuts() {
   });
 
   // Toggle window visibility
-  globalShortcut.register('CommandOrControl+Shift+Space', () => {
+  globalShortcut.register('CommandOrControl+B', () => {
     if (mainWindow) {
       if (mainWindow.isVisible()) {
         mainWindow.hide();
