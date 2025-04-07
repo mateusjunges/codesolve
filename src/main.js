@@ -72,44 +72,66 @@ function createWindow() {
       backgroundThrottling: false // Prevent background throttling
     }
   });
-  
-  // macOS-specific settings to make the window invisible to screen capture
-  if (process.platform === 'darwin') {
-    // Prevent window from appearing in Mission Control
-    mainWindow.setAutoHideMenuBar(true);
-    mainWindow.setWindowButtonVisibility(false);
-    mainWindow.setContentProtection(false);
-    
-    // Critical: Use a window level beyond what OBS typically captures
-    // For the ultimate anti-OBS stealth on macOS, we use a HIGHER level than screen-saver
-    mainWindow.setAlwaysOnTop(true, 'torn-off-menu');
-    
-    // Hide from dock completely
-    app.dock.hide();
-    
-    // Additional macOS-specific settings
-    mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
-    
-    // Using the native full-screen background helps evade OBS
-    try {
-      const { screen } = require('electron');
-      const display = screen.getPrimaryDisplay();
-      
-      // Place the window in a position less likely to be captured by OBS
-      mainWindow.setPosition(0, 0);
-      
-      // Use opacity to make it harder for OBS to detect
-      mainWindow.setOpacity(0.95);
-      
-      // Set window size to make it more likely to be seen as a system UI element
-      mainWindow.setBounds({
-        x: display.bounds.width / 4,
-        y: display.bounds.height / 4,
-        width: display.bounds.width / 2,
-        height: display.bounds.height / 2
-      });
-    } catch (e) {
-      console.error('Error configuring OBS invisibility:', e);
+
+  console.log("[WINDOW] Browser window created.");
+
+  const startingUrl = isDev
+    ? 'http://localhost:3000'
+    : `file://${path.join(__dirname, '../build/index.html')}`
+
+  require('@electron/remote/main').initialize();
+
+  console.log(`[WINDOW] loading URL: ${startingUrl}`);
+
+  mainWindow.loadURL(startingUrl).then(() => {
+    console.log("[WINDOW] Loaded URL:", startingUrl);
+  }).catch(err => {
+    console.log("[ERROR] Something wrong happened while loading URL:", startingUrl);
+  });
+
+  require('@electron/remote/main').enable(mainWindow.webContents);
+
+  // Prevent window from appearing in Mission Control
+  mainWindow.setAutoHideMenuBar(true);
+  mainWindow.setWindowButtonVisibility(false);
+  mainWindow.setContentProtection(true);
+  console.log('[WINDOW] Content protection enabled');
+
+  mainWindow.setAlwaysOnTop(true, 'screen-saver', 1);
+
+  // Hide from dock completely
+  app.dock.hide();
+
+  // Additional macOS-specific settings
+  mainWindow.setVisibleOnAllWorkspaces(true, {
+    visibleOnFullScreen: true,
+    skipTransformProcessType: true,
+  });
+
+  mainWindow.on('ready-to-show', () => {
+      console.log('[WINDOW] Window is ready to show');
+  })
+
+  mainWindow.webContents.on('did-start-loading', () => {
+      console.log('[WINDOW] Window started loading');
+  });
+
+  mainWindow.webContents.on('did-finish-load', () => {
+      console.log('[WINDOW] Window finished loading');
+  });
+
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+    console.error(`[WINDOW] did-fail-load: ${errorDescription} (${errorCode})`);
+  });
+
+  mainWindow.webContents.on('crashed', (event, killed) => {
+    console.error(`[WINDOW] Renderer process ${killed ? 'was killed' : 'crashed'}`);
+  });
+
+
+  const ensureOnTop = () => {
+    if (process.platform === 'darwin') {
+      mainWindow.setAlwaysOnTop(true, 'screen-saver', 1)
     }
   }
 
