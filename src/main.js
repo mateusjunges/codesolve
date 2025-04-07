@@ -184,6 +184,8 @@ app.on('window-all-closed', () => {
 
 // Register keyboard shortcuts
 function registerShortcuts() {
+  console.log("[SHORTCUTS] Registering global shortcuts");
+
   const moveWindow = (() => {
     let lastMoveTime = 0;
     const moveThrottle = 16; // 60 FPS
@@ -200,8 +202,6 @@ function registerShortcuts() {
       }
     }
   })();
-
-  console.log("[SHORTCUTS] Registering global shortcuts");
 
   globalShortcut.register('CommandOrControl+Option+Up', () => {
     if (mainWindow) {
