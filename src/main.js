@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, dialog, screen } = require('electron');
 const path = require('path');
 // Import electron-store
 const Store = require('electron-store').default || require('electron-store');
@@ -6,6 +6,8 @@ const screenshot = require('screenshot-desktop');
 const { fileURLToPath } = require('url');
 const fs = require('fs');
 const os = require('os');
+
+const isDev = process.env.NODE_ENV === 'development';
 
 // Import OpenAI service
 const OpenAIService = require('./openai-service');
@@ -171,9 +173,6 @@ function createWindow() {
   // Load the index.html of the app
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
-  // Set opacity for transparency effect
-  mainWindow.setOpacity(0.9);
-
   // Make window click-through when needed
   mainWindow.setIgnoreMouseEvents(false); // Will toggle with shortcut
 
@@ -272,6 +271,7 @@ function registerShortcuts() {
   // Analysis trigger shortcut (Cmd+Enter)
   globalShortcut.register('CommandOrControl+Enter', () => {
     if (mainWindow) {
+      console.log("[SHORTCUTS] Cmd+Enter pressed: Triggering code analysis");
       console.log('Cmd+Enter pressed: Triggering code analysis');
       
       // Get the current screenshot path from the main process
