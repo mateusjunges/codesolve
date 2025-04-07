@@ -416,8 +416,7 @@ ipcMain.handle('analyze-code', async (event, screenshotPath) => {
     }
     
     // Analyze the code from the screenshot
-    const result = await openaiService.analyzeCodeFromScreenshot(screenshotPath);
-    return result;
+    return await openaiService.analyzeCodeFromScreenshot(screenshotPath);
   } catch (error) {
     console.error('Error analyzing code:', error);
     throw error;
