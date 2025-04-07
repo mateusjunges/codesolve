@@ -102,6 +102,7 @@ function createWindow() {
     console.log("[WINDOW] Loaded URL:", startingUrl);
   }).catch(err => {
     console.log("[ERROR] Something wrong happened while loading URL:", startingUrl);
+    console.error("[ERROR]", err);
   });
 
   require('@electron/remote/main').enable(mainWindow.webContents);

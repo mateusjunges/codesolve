@@ -78,7 +78,7 @@ class OpenAIService {
             content: [
               { 
                 type: 'text', 
-                text: 'Please analyze this code and help me resolve any issues or explain the solution to this coding problem:' 
+                text: 'Please analyze this LeetCode challenge. You must provide an optimized solution with comments and the Big O notation for time and space complexity analysis. Input: '
               },
               {
                 type: 'image_url',
