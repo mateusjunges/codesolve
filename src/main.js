@@ -145,7 +145,10 @@ function createWindow() {
   mainWindow.setIgnoreMouseEvents(false); // Will toggle with shortcut
 
   // Open DevTools in development
-  // mainWindow.webContents.openDevTools();
+  if (isDev && process.env.OPEN_DEV_TOOLS === 'true') {
+    console.log('[WINDOW] Opening DevTools');
+    mainWindow.webContents.openDevTools({mode: 'detach'});
+  }
 
   // Set window to always be on top
   mainWindow.setAlwaysOnTop(true, 'floating');
