@@ -51,25 +51,38 @@ function createWindow() {
   // Create the browser window with specific settings for invisibility to screen recording
   console.log("[WINDOW] Creating the main window");
 
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width, height } = primaryDisplay.workAreaSize;
+
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     transparent: true,
     frame: false,
     vibrancy: 'under-window', // macOS-specific vibrancy setting
-    visualEffectState: 'active', // Ensure visual effects are active
     hasShadow: false,
     alwaysOnTop: true,
+    movable: true,
+    resizable: true,
     skipTaskbar: true,
     backgroundColor: '#00000000',
     titleBarStyle: 'hidden',
+    title: "",
     roundedCorners: false,
+    opacity: 0.98,
+    useContentSize: true,
+    fullscreenable: false,
+    visualEffectState: 'followWindow',
+    renderCorners: false,
+    paintWhenInitiallyHidden: true,
+    minimizable: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
-      enableRemoteModule: false,
-      backgroundThrottling: false // Prevent background throttling
+      enableRemoteModule: true,
+      backgroundThrottling: false,
+      devTools: true
     }
   });
 
@@ -133,6 +146,26 @@ function createWindow() {
     if (process.platform === 'darwin') {
       mainWindow.setAlwaysOnTop(true, 'screen-saver', 1)
     }
+  };
+
+  try {
+    const display = screen.getPrimaryDisplay();
+
+    // Place the window in a position less likely to be captured by OBS
+    mainWindow.setPosition(0, 0);
+
+    // Use opacity to make it harder for OBS to detect
+    mainWindow.setOpacity(0.95);
+
+    // Set window size to make it more likely to be seen as a system UI element
+    mainWindow.setBounds({
+      x: display.bounds.width / 4,
+      y: display.bounds.height / 4,
+      width: display.bounds.width / 2,
+      height: display.bounds.height / 2
+    });
+  } catch (e) {
+    console.error('Error configuring OBS invisibility:', e);
   }
 
   // Load the index.html of the app
