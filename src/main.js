@@ -231,11 +231,9 @@ function registerShortcuts() {
     }
   });
 
-
-
-  // Screenshot capture shortcut (Cmd+H)
-  globalShortcut.register('CommandOrControl+H', () => {
-    takeScreenshot();
+  // Screenshot capture shortcut (Cmd+S)
+  globalShortcut.register('CommandOrControl+S', async () => {
+    await takeScreenshot();
   });
 
   // Analysis trigger shortcut (Cmd+Enter)
