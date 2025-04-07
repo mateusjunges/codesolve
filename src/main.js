@@ -159,6 +159,55 @@ app.on('window-all-closed', () => {
 
 // Register keyboard shortcuts
 function registerShortcuts() {
+  const moveWindow = (() => {
+    let lastMoveTime = 0;
+    const moveThrottle = 16; // 60 FPS
+
+    return (x, y) => {
+      const now = Date.now();
+      if (mainWindow && (now - lastMoveTime) > moveThrottle) {
+        lastMoveTime = now;
+        mainWindow.setBounds({
+          ...mainWindow.getBounds(),
+          x,
+          y,
+        });
+      }
+    }
+  })();
+
+  console.log("[SHORTCUTS] Registering global shortcuts");
+
+  globalShortcut.register('CommandOrControl+Option+Up', () => {
+    if (mainWindow) {
+      const [x, y] = mainWindow.getPosition();
+      moveWindow(x, y - 50);
+    }
+  });
+
+  globalShortcut.register('CommandOrControl+Option+Down', () => {
+    if (mainWindow) {
+      const [x, y] = mainWindow.getPosition();
+      moveWindow(x, y + 50);
+    }
+  });
+
+  globalShortcut.register('CommandOrControl+Option+Left', () => {
+    if (mainWindow) {
+      const [x, y] = mainWindow.getPosition();
+      moveWindow(x - 50, y);
+    }
+  });
+
+  globalShortcut.register('CommandOrControl+Option+Right', () => {
+    if (mainWindow) {
+      const [x, y] = mainWindow.getPosition();
+      moveWindow(x + 50, y);
+    }
+  });
+
+
+
   // Screenshot capture shortcut (Cmd+H)
   globalShortcut.register('CommandOrControl+H', () => {
     takeScreenshot();
