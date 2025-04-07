@@ -14,6 +14,9 @@
 
 ## 📋 Overview
 
+> [!NOTE]  
+> This was crafted entirely using Windsurf. The code is not perfect (it's really bad, actually), but it works.
+
 CodeSolve is a streamlined overlay application designed for developers to solve coding problems without disrupting their workflow. With a simple screenshot capture, CodeSolve leverages OpenAI's GPT-4o to analyze code issues and provide intelligent solutions while remaining unobtrusive in the background.
 
 ## ✨ Key Features
