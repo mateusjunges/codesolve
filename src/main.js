@@ -48,17 +48,6 @@ if (!fs.existsSync(tmpDir)) {
 }
 
 function createWindow() {
-  // Special flag for OBS invisibility
-  const obsInvisibilityFlags = process.platform === 'darwin' ? {
-    // Use utility window type which is less likely to be captured
-    type: 'desktop', // Using 'desktop' type is less visible to OBS
-    // These additional flags help with OBS invisibility
-    focusable: true,
-    enableLargerThanScreen: true,
-    fullscreenable: false,
-    simpleFullscreen: false,
-  } : {};
-
   // Create the browser window with specific settings for invisibility to screen recording
   mainWindow = new BrowserWindow({
     width: 800,
@@ -73,7 +62,6 @@ function createWindow() {
     backgroundColor: '#00000000',
     titleBarStyle: 'hidden',
     roundedCorners: false,
-    ...obsInvisibilityFlags,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
