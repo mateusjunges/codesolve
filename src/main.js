@@ -49,6 +49,8 @@ if (!fs.existsSync(tmpDir)) {
 
 function createWindow() {
   // Create the browser window with specific settings for invisibility to screen recording
+  console.log("[WINDOW] Creating the main window");
+
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
