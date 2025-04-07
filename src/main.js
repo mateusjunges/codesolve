@@ -268,28 +268,6 @@ function registerShortcuts() {
   globalShortcut.register('CommandOrControl+S', async () => {
     await takeScreenshot();
   });
-
-  // Analysis trigger shortcut (Cmd+Enter)
-  globalShortcut.register('CommandOrControl+Enter', () => {
-    if (mainWindow) {
-      console.log("[SHORTCUTS] Cmd+Enter pressed: Triggering code analysis");
-      console.log('Cmd+Enter pressed: Triggering code analysis');
-      
-      // Get the current screenshot path from the main process
-      console.log('Current screenshot path:', latestScreenshotPath);
-      
-      // Send the event and the current screenshot path to ensure syncing
-      mainWindow.webContents.send('trigger-analysis', latestScreenshotPath);
-      
-      // Briefly flash the window to provide visual feedback
-      if (!mainWindow.isVisible()) {
-        mainWindow.show();
-      }
-      
-      // Focus the window to ensure it receives the event
-      mainWindow.focus();
-    }
-  });
   
   // Scroll down shortcut (Cmd+Shift+Down)
   globalShortcut.register('CommandOrControl+Shift+Down', () => {

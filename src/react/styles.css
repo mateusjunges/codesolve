@@ -829,3 +829,28 @@ kbd {
   align-items: center;
   gap: 8px;
 }
+
+.response-content {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  overflow-y: visible; /* Let parent container handle scrolling */
+  flex: 1;
+  cursor: text; /* Show text cursor for content */
+  user-select: text; /* Ensure text is selectable */
+  width: 100%;
+}
+
+
+.scroll-indicator {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

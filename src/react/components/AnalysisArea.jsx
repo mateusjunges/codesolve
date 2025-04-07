@@ -15,6 +15,9 @@ const AnalysisArea = forwardRef(({
   const resultSectionRef = useRef(null);
   const [copiedIndex, setCopiedIndex] = useState(null);
 
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+  const responseSectionRef = useRef(null);
+
   
   // Function to render markdown with code highlighting
   const renderMarkdown = (text) => {
@@ -193,15 +196,6 @@ const AnalysisArea = forwardRef(({
     }
   };
 
-  const copyToClipboard = (text, index) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedIndex(index);
-      setTimeout(() => {
-        setCopiedIndex(null);
-      }, 2000);
-    });
-  };
-
   return (
     <div className="analysis-area">
       {/* Ultra-compact screenshot strip at top */}
@@ -229,52 +223,75 @@ const AnalysisArea = forwardRef(({
             <p>Error: {error}</p>
           </div>
         ) : analysisResult ? (
-          <div className="result-content markdown-content analysis-result">
-            {formattedResult.length > 0 ? formattedResult.map((responsePart, index) => (
-                responsePart.type === 'code' ? (
-                    <div key={`code-${index}`} className="code-block">
-                      <div className="code-header">
-                        <div className="code-header-left">
-                          <span className="code-language">{responsePart.language}</span>
-                          {responsePart.title && <span className="code-filename">{responsePart.title}</span>}
+          <div
+              tabIndex={0}
+              className="result-content markdown-content analysis-result response-section"
+              onKeyDown={(e) => {
+                if (['ArrowDown', 'ArrowUp'].includes(e.key)) {
+                  const el = responseSectionRef.current;
+                  const isModifierPressed = e.metaKey || e.ctrlKey;
+                  const scrollAmount = isModifierPressed ? 200 : 50;
+
+                  if (e.key === 'ArrowUp') {
+                    el.scrollTop -= scrollAmount;
+                  } else if (e.key === 'ArrowDown') {
+                    el.scrollTop += scrollAmount;
+                  }
+
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
+              ref={responseSectionRef}>
+            <div
+                className="response-content"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  responseSectionRef.current.focus();
+                }}
+            >
+              {formattedResult.length > 0 ? formattedResult.map((responsePart, index) => (
+                  responsePart.type === 'code' ? (
+                      <div key={`code-${index}`} className="code-block">
+                        <div className="code-header">
+                          <div className="code-header-left">
+                            <span className="code-language">{responsePart.language}</span>
+                            {responsePart.title && <span className="code-filename">{responsePart.title}</span>}
+                          </div>
                         </div>
-                        <button
-                            className="copy-button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              copyToClipboard(responsePart.content, index);
+                        <SyntaxHighlighter
+                            style={vscDarkPlus}
+                            language={responsePart.language}
+                            customStyle={{
+                              margin: '0',
+                              borderRadius: '0 0 4px 4px',
+                              fontSize: '13px',
+                              maxWidth: '100%',
+                              background: 'rgba(30, 30, 30, 0.7)',
                             }}
+                            wrapLongLines={false}
+                            showLineNumbers={true}
                         >
-                          {copiedIndex === index ? 'Copied!' : 'Copy'}
-                        </button>
+                          {responsePart.content}
+                        </SyntaxHighlighter>
                       </div>
-                      <SyntaxHighlighter
-                          style={vscDarkPlus}
-                          language={responsePart.language}
-                          customStyle={{
-                            margin: '0',
-                            borderRadius: '0 0 4px 4px',
-                            fontSize: '13px',
-                            maxWidth: '100%',
-                            background: 'rgba(30, 30, 30, 0.7)',
-                          }}
-                          wrapLongLines={false}
-                          showLineNumbers={true}
-                      >
-                        {responsePart.content}
-                      </SyntaxHighlighter>
-                    </div>
-                ) : (
-                    <div key={`text-${index}`} className="text-content">
-                      {responsePart.content.split('\n').map((line, i) => (
-                          <React.Fragment key={i}>
-                            {line}
-                            {i < responsePart.content.split('\n').length - 1 && <br />}
-                          </React.Fragment>
-                      ))}
-                    </div>
-                )
-            )) : null}
+                  ) : (
+                      <div key={`text-${index}`} className="text-content">
+                        {responsePart.content.split('\n').map((line, i) => (
+                            <React.Fragment key={i}>
+                              {line}
+                              {i < responsePart.content.split('\n').length - 1 && <br />}
+                            </React.Fragment>
+                        ))}
+                      </div>
+                  )
+              )) : null}
+            </div>
+            {showScrollIndicator && (
+                <div className="scroll-indicator">
+                  <span>Scroll for more</span>
+                </div>
+            )}
           </div>
         ) : (
           <div className="result-placeholder">
@@ -293,7 +310,8 @@ const AnalysisArea = forwardRef(({
         </button>
         
         <button 
-          className="small-btn analyze-btn" 
+          className="small-btn analyze-btn"
+          id="analyze-btn"
           onClick={analyzeCode}
           disabled={!screenshot || isAnalyzing}
         >
